@@ -15,7 +15,18 @@
         - "./vars/os_specific_default.yml"    
 
   roles:
+    - role: geerlingguy.ntp
     - role: geerlingguy.java
     - role: geerlingguy.docker
+    - role: geerlingguy.git
+    - role: geerlingguy.ansible
     - role: geerlingguy.jenkins
 
+  tasks:
+    - name: Install Jenkins-Host-System packages
+      package:
+        name:
+          - git
+        state: present
+      become: true    
+    

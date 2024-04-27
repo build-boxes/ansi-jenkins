@@ -7,6 +7,7 @@ vmpwd1: "{{ vault_vmpwd1 }}"
 vmuser2: "{{ vault_vmuser2 }}"
 vmpwd2: "{{ vault_vmpwd2 }}"
 # geerlinguy-roles-vars follow:
+ntp_timezone: America/Toronto
 java_packages:
   - openjdk-17-jdk
 docker_edition: 'ce'
@@ -23,4 +24,8 @@ jenkins_plugins:
   - blueocean
   - docker-workflow
   - junit
+  - git
+  - ansible
+  - ansicolor
 jenkins_url_prefix: "/jenkins"
+jenkins_java_options: "-Djenkins.install.runSetupWizard=false -Dorg.apache.commons.jelly.tags.fmt.timeZone=America/Toronto"

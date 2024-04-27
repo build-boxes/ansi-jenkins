@@ -1,5 +1,8 @@
 ---
 roles:
+  - geerlingguy.ntp
   - geerlingguy.java
   - geerlingguy.docker
+  - geerlingguy.git
+  - geerlingguy.ansible
   - geerlingguy.jenkins
