@@ -1,0 +1,26 @@
+---
+####
+# Ansible Playbook Variables - Common to all OS
+####
+vmuser1: "{{ vault_vmuser1 }}"
+vmpwd1: "{{ vault_vmpwd1 }}"
+vmuser2: "{{ vault_vmuser2 }}"
+vmpwd2: "{{ vault_vmpwd2 }}"
+# geerlinguy-roles-vars follow:
+java_packages:
+  - openjdk-17-jdk
+docker_edition: 'ce'
+docker_packages:
+    - "docker-{{ docker_edition }}"
+    - "docker-{{ docker_edition }}-cli"
+    - "docker-{{ docker_edition }}-rootless-extras"
+docker_packages_state: present    
+jenkins_hostname: localhost
+jenkins_http_port: 8080
+jenkins_admin_username: admin
+jenkins_admin_password: "{{ vault_jk_admin_pwd }}"
+jenkins_plugins:
+  - blueocean
+  - docker-workflow
+  - junit
+jenkins_url_prefix: "/jenkins"

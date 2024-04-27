@@ -1,0 +1,5 @@
+---
+roles:
+  - geerlingguy.java
+  - geerlingguy.docker
+  - geerlingguy.jenkins
