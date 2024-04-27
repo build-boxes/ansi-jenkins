@@ -28,5 +28,5 @@
         name:
           - git
         state: present
-      become: true    
-    
+      become: true
+
