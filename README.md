@@ -49,6 +49,6 @@ It can be used in Windows 10/11 (a bit difficult to setup), or you can use Debia
     terraform destroy -auto-approve
     ```
 ## Restore a Previous Backup (Optional)
-You can optionaly also restore a previously backed up Jenkins-Home-Folder using this ansible script. Related Vars and secrets are highlighted below:  
+You can optionaly also restore a previously backed up Jenkins-Home-Folder using this ansible script. Related Vars and secrets are highlighted below. The backed up filename.tar.gz should be available on the Ansible controller host. It will be uploded to the created (remote) VM by the script.
 1. [https://github.com/build-boxes/ansi-jenkins/blob/main/vars/vars.yml#L30](https://github.com/build-boxes/ansi-jenkins/blob/main/vars/vars.yml#L30) Line 30 to Line 32.
 2. [https://github.com/build-boxes/ansi-jenkins/blob/main/vars/secrets_shadow.yml#L22](https://github.com/build-boxes/ansi-jenkins/blob/main/vars/secrets_shadow.yml#L22) Line 22 and Line 23.
