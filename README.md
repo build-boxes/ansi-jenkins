@@ -29,7 +29,7 @@ You can browse jenkins either locally on the VirtualBox Host computer or via Pub
 1. Local HOST Computer:
     [http:localhost:8080/jenkins](http:localhost:8080/jenkins)
 2. Public URL:
-    [https://hexword.ca/jenkins](https://hexword.ca/jenkins)
+    [https://<<YOUR-DOMAIN-NAME>>/jenkins](https://<<YOUR-DOMAIN-NAME>>/jenkins)
 
 ## Cloud Image Creation - On Linode (NOT Being Implemented)
 It can be used in Windows 10/11 (a bit difficult to setup), or you can use Debian/Ubuntu host environemnt.

@@ -35,18 +35,41 @@
         name: jenkins
         groups: docker
         append: yes
+    - name: Stop service Jenkins if started
+      ansible.builtin.service:
+        name: jenkins
+        state: stopped        
+    # - name: Copy content of directory 'plugins'
+    #   copy:
+    #     remote_src: true      
+    #     src: /var/lib/jenkins/plugins
+    #     dest: /mnt/shared_folder/plugins
     - name: Delete Jenkins directory
       ansible.builtin.file:
         state: absent
         path: /var/lib/jenkins
     - name: Recreate Jenkins directory
       ansible.builtin.file:
-        state: present
+        state: directory
         path: /var/lib/jenkins
     - name: Extract old Jenkins backup into /var/lib/jenkins
       ansible.builtin.unarchive:
-        src: /mnt/shared_folder/jenkins-home-folder-2022-06-24.tar.gz
+        remote_src: true
+        src: /mnt/shared_folder/jenkins-home-folder-2024-05-01.tar.gz
         dest: /var/lib/jenkins/
+    # - name: Delete new plugins directory
+    #   ansible.builtin.file:
+    #     state: absent
+    #     path: /var/lib/jenkins/plugins
+    # - name: Recreate plugins directory
+    #   ansible.builtin.file:
+    #     state: directory
+    #     path: /var/lib/jenkins/plugins
+    # - name: Copy content of directory 'plugins'
+    #   copy:
+    #     remote_src: true      
+    #     src: /mnt/shared_folder/plugins
+    #     dest: /var/lib/jenkins/plugins
     - name: Change ownership of the /var/lib/jenkins back to jenkins:jenkins
       file:
         state : directory
@@ -54,6 +77,3 @@
         path : /var/lib/jenkins
         owner: jenkins
         group: jenkins
-    - name: Unconditionally reboot the machine with all defaults
-      ansible.builtin.reboot:
-      
