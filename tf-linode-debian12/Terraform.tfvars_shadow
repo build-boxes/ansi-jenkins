@@ -1,0 +1,5 @@
+# This is a Shadow file, illustrating what the actual file should contain.
+pub_key="/path/to/pub/key.pub"
+pvt_key="/path/to/pvt/key"
+root_password="xxxx"
+api_access_token="xxxx"

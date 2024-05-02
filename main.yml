@@ -29,47 +29,51 @@
           - git
         state: present
       become: true
-
     - name: Modify user 'Jenkins' to add group 'docker'
       ansible.builtin.user:
         name: jenkins
         groups: docker
         append: yes
+      become: true
+
     - name: Stop service Jenkins if started
       ansible.builtin.service:
         name: jenkins
-        state: stopped        
-    # - name: Copy content of directory 'plugins'
-    #   copy:
-    #     remote_src: true      
-    #     src: /var/lib/jenkins/plugins
-    #     dest: /mnt/shared_folder/plugins
+        state: stopped
+      become: true
+      when: jk_restore_backup
+    - name: Create /tmp/downloads directory
+      ansible.builtin.file:
+        state: directory
+        path: /tmp/downloads
+      become: true
+      when: jk_restore_backup
+    - name: Download the backup file
+      copy:
+        remote_src: false      
+        src: "{{ jk_backup_host_folder }}/{{ jk_backup_tar_gz }}"
+        dest: "/tmp/downloads/{{ jk_backup_tar_gz }}"
+      become: true
+      when: jk_restore_backup
     - name: Delete Jenkins directory
       ansible.builtin.file:
         state: absent
         path: /var/lib/jenkins
+      become: true
+      when: jk_restore_backup
     - name: Recreate Jenkins directory
       ansible.builtin.file:
         state: directory
         path: /var/lib/jenkins
+      become: true
+      when: jk_restore_backup
     - name: Extract old Jenkins backup into /var/lib/jenkins
       ansible.builtin.unarchive:
         remote_src: true
-        src: /mnt/shared_folder/jenkins-home-folder-2024-05-01.tar.gz
+        src: "/tmp/downloads/{{ jk_backup_tar_gz }}"
         dest: /var/lib/jenkins/
-    # - name: Delete new plugins directory
-    #   ansible.builtin.file:
-    #     state: absent
-    #     path: /var/lib/jenkins/plugins
-    # - name: Recreate plugins directory
-    #   ansible.builtin.file:
-    #     state: directory
-    #     path: /var/lib/jenkins/plugins
-    # - name: Copy content of directory 'plugins'
-    #   copy:
-    #     remote_src: true      
-    #     src: /mnt/shared_folder/plugins
-    #     dest: /var/lib/jenkins/plugins
+      become: true
+      when: jk_restore_backup
     - name: Change ownership of the /var/lib/jenkins back to jenkins:jenkins
       file:
         state : directory
@@ -77,3 +81,11 @@
         path : /var/lib/jenkins
         owner: jenkins
         group: jenkins
+      become: true
+      when: jk_restore_backup
+    - name: Delete /tmp/downloads directory
+      ansible.builtin.file:
+        state: absent
+        path: /tmp/downloads
+      become: true
+      when: jk_restore_backup

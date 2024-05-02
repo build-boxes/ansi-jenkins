@@ -2,10 +2,7 @@
 ####
 # Ansible Playbook Variables - Common to all OS
 ####
-vmuser1: "{{ vault_vmuser1 }}"
-vmpwd1: "{{ vault_vmpwd1 }}"
-vmuser2: "{{ vault_vmuser2 }}"
-vmpwd2: "{{ vault_vmpwd2 }}"
+
 # geerlinguy-roles-vars follow:
 ntp_timezone: America/Toronto
 java_packages:
@@ -18,7 +15,7 @@ docker_packages:
 docker_packages_state: present    
 jenkins_hostname: localhost
 jenkins_http_port: 8080
-jenkins_admin_username: admin
+jenkins_admin_username: "{{ vault_jk_admin_name }}"
 jenkins_admin_password: "{{ vault_jk_admin_pwd }}"
 jenkins_plugins:
   - blueocean
@@ -29,3 +26,7 @@ jenkins_plugins:
   - ansicolor
 jenkins_url_prefix: "/jenkins"
 jenkins_java_options: "-Djenkins.install.runSetupWizard=false -Dorg.apache.commons.jelly.tags.fmt.timeZone=America/Toronto"
+# Additional - Hammad
+jk_restore_backup: true
+jk_backup_tar_gz: "{{ vault_jk_backup_tar_gz }}"
+jk_backup_host_folder: "{{ vault_jk_backup_host_folder }}"     # Do not put / at the end
