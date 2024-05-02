@@ -41,7 +41,7 @@ It can be used in Windows 10/11 (a bit difficult to setup), or you can use Debia
     ```
     ansible-galaxy install -r ./roles/requirements.yml
     ```   
-5. Change into "../tf-linode*" subfolder
+5. Change into "tf-linode*" subfolder
 6. Run:
     ```
     terraform init
