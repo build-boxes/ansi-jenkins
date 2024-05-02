@@ -58,10 +58,10 @@ You can optionaly also restore a previously backed up Jenkins-Home-Folder using 
 2. [https://github.com/build-boxes/ansi-jenkins/blob/main/vars/secrets_shadow.yml#L22](https://github.com/build-boxes/ansi-jenkins/blob/main/vars/secrets_shadow.yml#L22) Line 22 and Line 23.
 
 
-## TODO
-Debian - openjdk-21-jdk
-RHEL - java-21-openjdk
--
+## TODO  
+- Debian - openjdk-21-jdk
+- RHEL - java-21-openjdk
+  
 ```
 Terraform
 
