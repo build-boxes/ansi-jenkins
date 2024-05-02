@@ -29,7 +29,7 @@ You can browse jenkins either locally on the VirtualBox Host computer or via Pub
 1. Local HOST Computer:
     [http:localhost:8080/jenkins](http:localhost:8080/jenkins)
 2. Public URL:  
-    - if reverse proxy is setup in your separate Web Server.....
+    - if reverse proxy is setup in your separate Web Server.....  
     [https://<<YOUR-DOMAIN-NAME>>/jenkins](https://<<YOUR-DOMAIN-NAME>>/jenkins)
 
 ## Cloud Image Creation - On Linode
