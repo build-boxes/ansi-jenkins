@@ -59,8 +59,6 @@ You can optionaly also restore a previously backed up Jenkins-Home-Folder using 
 
 
 ## TODO  
-- Debian - openjdk-21-jdk
-- RHEL - java-21-openjdk
   
 ```
 Terraform

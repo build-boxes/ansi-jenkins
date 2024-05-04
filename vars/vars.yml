@@ -5,8 +5,6 @@
 
 # geerlinguy-roles-vars follow:
 ntp_timezone: America/Toronto
-java_packages:
-  - openjdk-17-jdk
 docker_edition: 'ce'
 docker_packages:
     - "docker-{{ docker_edition }}"
@@ -15,6 +13,7 @@ docker_packages:
 docker_packages_state: present    
 jenkins_hostname: localhost
 jenkins_http_port: 8080
+jenkins_home: /var/lib/jenkins
 jenkins_admin_username: "{{ vault_jk_admin_name }}"
 jenkins_admin_password: "{{ vault_jk_admin_pwd }}"
 jenkins_plugins:

@@ -12,7 +12,19 @@
       include_vars: "{{ item }}"
       with_first_found:
         - "./vars/os_specific_{{ ansible_os_family }}.yml"
-        - "./vars/os_specific_default.yml"    
+        - "./vars/os_specific_default.yml"
+
+    - name: Gather the installed package facts
+      ansible.builtin.package_facts:
+        manager: auto      
+      when: ansible_os_family == "RedHat"
+
+    - name: Stop and disable Firewalld service
+      service:
+        name: firewalld
+        state: stopped
+        enabled: false
+      when: ansible_os_family == "RedHat" and "'firewalld' in ansible_facts.packages"
 
   roles:
     - role: geerlingguy.ntp
@@ -23,12 +35,14 @@
     - role: geerlingguy.jenkins
 
   tasks:
+
     - name: Install Jenkins-Host-System packages
       package:
         name:
           - git
         state: present
       become: true
+
     - name: Modify user 'Jenkins' to add group 'docker'
       ansible.builtin.user:
         name: jenkins
@@ -42,12 +56,14 @@
         state: stopped
       become: true
       when: jk_restore_backup
+
     - name: Create /tmp/downloads directory
       ansible.builtin.file:
         state: directory
         path: /tmp/downloads
       become: true
       when: jk_restore_backup
+
     - name: Download the backup file
       copy:
         remote_src: false      
@@ -55,37 +71,43 @@
         dest: "/tmp/downloads/{{ jk_backup_tar_gz }}"
       become: true
       when: jk_restore_backup
+
     - name: Delete Jenkins directory
       ansible.builtin.file:
         state: absent
-        path: /var/lib/jenkins
+        path: "{{ jenkins_home }}"
       become: true
       when: jk_restore_backup
+
     - name: Recreate Jenkins directory
       ansible.builtin.file:
         state: directory
-        path: /var/lib/jenkins
+        path: "{{ jenkins_home }}"
       become: true
       when: jk_restore_backup
-    - name: Extract old Jenkins backup into /var/lib/jenkins
+
+    - name: Extract old Jenkins backup into jenkins_home
       ansible.builtin.unarchive:
         remote_src: true
         src: "/tmp/downloads/{{ jk_backup_tar_gz }}"
-        dest: /var/lib/jenkins/
+        dest: "{{ jenkins_home }}/"
       become: true
       when: jk_restore_backup
+
     - name: Change ownership of the /var/lib/jenkins back to jenkins:jenkins
       file:
         state : directory
         recurse : yes
-        path : /var/lib/jenkins
+        path : "{{ jenkins_home }}"
         owner: jenkins
         group: jenkins
       become: true
       when: jk_restore_backup
+
     - name: Delete /tmp/downloads directory
       ansible.builtin.file:
         state: absent
         path: /tmp/downloads
       become: true
       when: jk_restore_backup
+ 
