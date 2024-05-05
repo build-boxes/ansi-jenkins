@@ -23,9 +23,10 @@ jenkins_plugins:
   - git
   - ansible
   - ansicolor
+  - terraform
 jenkins_url_prefix: "/jenkins"
 jenkins_java_options: "-Djenkins.install.runSetupWizard=false -Dorg.apache.commons.jelly.tags.fmt.timeZone=America/Toronto"
 # Additional - Hammad
-jk_restore_backup: true
+jk_restore_backup: false
 jk_backup_tar_gz: "{{ vault_jk_backup_tar_gz }}"
 jk_backup_host_folder: "{{ vault_jk_backup_host_folder }}"     # Do not put / at the end
