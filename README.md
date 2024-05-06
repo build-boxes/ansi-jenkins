@@ -71,3 +71,34 @@ https://developer.hashicorp.com/terraform/install
 
 https://github.com/robertdebock/ansible-role-terraform
 ```
+
+```
+"java -jar /opt/jenkins-cli.jar -s http://localhost:{{ jenkins_http_port }}{{ jenkins_url_prefix }} -auth {{ jenkins_admin_username }}:{{ jenkins_admin_password }}"
+
+
+Get Jenkins-Crumb json:
+curl -s -X GET http://localhost:8080/jenkins/crumbIssuer/api/json --user USERNAME:PASSWORD | python3 -c 'import sys, json; print(json.load(sys.stdin)["crumb"])'
+
+curl -s -X GET http://localhost:8080/jenkins/crumbIssuer/api/json --user USERNAME:PASSWORD | jq '.crumb' | sed 's/\"//g'
+
+curl -s -X GET http://localhost:8080/jenkins/crumbIssuer/api/json --user USERNAME:PASSWORD | jq ".crumb" | sed "s/\"//g"
+
+Get Jenkins-Crumb XML:
+curl -u "USERNAME:PASSWORD" -s --cookie-jar /tmp/cookies 'http://localhost:8080/jenkins/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)'
+OR
+JENKINS_CRUMB=$(curl -u "USERNAME:PASSWORD" -s --cookie-jar /tmp/cookies 'http://localhost:8080/jenkins/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)')
+
+This one is working:
+ACCESS_TOKEN=$(curl -u "USERNAME:PASSWORD" -H $(curl -u "USERNAME:PASSWORD" -s --cookie-jar /tmp/cookies 'http://localhost:8080/jenkins/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)') -s --cookie /tmp/cookies 'http://localhost:8080/jenkins/me/descriptorByName/jenkins.security.ApiTokenProperty/generateNewToken' --data 'newTokenName=AccessToken001' | jq -r '.data.tokenValue')
+OR
+ACCESS_TOKEN=$(curl -u "USERNAME:PASSWORD" -H $JENKINS_CRUMB -s --cookie /tmp/cookies 'http://localhost:8080/jenkins/me/descriptorByName/jenkins.security.ApiTokenProperty/generateNewToken' --data 'newTokenName=AccessToken001' | jq -r '.data.tokenValue')
+
+
+echo $ACCESS_TOKEN
+
+Consective Calls:
+curl -u $JENKINS_USER:$ACCESS_TOKEN -H $JENKINS_CRUMB ..........
+
+java -jar /opt/jenkins-cli.jar [-s URL] -auth USERNAME:$ACCESS_TOKEN who-am-i
+
+```

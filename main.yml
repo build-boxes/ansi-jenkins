@@ -31,6 +31,7 @@
         name:
           - git
           - gpg
+          - jq
         state: present
       become: true
 
@@ -84,6 +85,15 @@
         state: stopped
       become: true
       when: jk_restore_backup
+
+    - name: Set /etc/environment (Environment variables) with "jk_os_environment" key value list. 
+      lineinfile:
+        path: "/etc/environment"
+        state: present
+        regexp: "^{{ item.key }}="
+        line: "{{ item.key }}={{ item.value}}"
+      with_dict: "{{ jk_os_environment }}"
+      become: yes
 
     - name: Create /tmp/downloads directory
       ansible.builtin.file:
