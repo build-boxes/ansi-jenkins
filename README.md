@@ -102,3 +102,15 @@ curl -u $JENKINS_USER:$ACCESS_TOKEN -H $JENKINS_CRUMB ..........
 java -jar /opt/jenkins-cli.jar [-s URL] -auth USERNAME:$ACCESS_TOKEN who-am-i
 
 ```
+
+```
+TASK [Get Jenkins API crumb] ***************************************************
+fatal: [debian]: FAILED! => {"changed": false, "msg": "Unsupported parameters for (ansible.legacy.uri) module: failed_when, register. Supported parameters include: attributes, body, body_format, ca_path, ciphers, client_cert, client_key, creates, decompress, dest, follow_redirects, force, force_basic_auth, group, headers, http_agent, method, mode, owner, remote_src, removes, return_content, selevel, serole, setype, seuser, src, status_code, timeout, unix_socket, unredirected_headers, unsafe_writes, url, url_password, url_username, use_gssapi, use_netrc, use_proxy, validate_certs (attr, password, user)."}
+
+PLAY RECAP *********************************************************************
+debian                     : ok=69   changed=30   unreachable=0    failed=1    skipped=59   rescued=0    ignored=0   
+
+Ansible failed to complete successfully. Any error output should be
+visible above. Please fix these errors and try again.
+
+```

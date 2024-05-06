@@ -32,14 +32,9 @@
           - git
           - gpg
           - jq
+          - python3-jmespath
         state: present
       become: true
-
-    # - name: Download Terraform Repo GPG Keys
-    #   ansible.builtin.get_url:
-    #     url: https://apt.releases.hashicorp.com/gpg
-    #     dest: /tmp/terraform-repo-gpg-key.asc
-    #     mode: '0777'
 
     - name: Add Hashicorp key downloaded from URL to Hashicorp Keyring
       ansible.builtin.apt_key:
@@ -47,8 +42,6 @@
         keyring: /usr/share/keyrings/hashicorp-archive-keyring.gpg
         state: present
       become: true
-
-
 
     - name: Add Terraform repository into sources list
       ansible.builtin.apt_repository:
@@ -86,7 +79,7 @@
       become: true
       when: jk_restore_backup
 
-    - name: Set /etc/environment (Environment variables) with "jk_os_environment" key value list. 
+    - name: Set /etc/environment (Environment variables) with "jk_os_environment" dictionary value list. 
       lineinfile:
         path: "/etc/environment"
         state: present
@@ -149,3 +142,39 @@
       become: true
       when: jk_restore_backup
  
+    - name: Get Jenkins API crumb
+      ansible.builtin.uri:
+        url: 'http://localhost:{{ jenkins_http_port }}{{ jenkins_url_prefix }}/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)'
+        user: '{{ jenkins_admin_username }}'
+        password: '{{ jenkins_admin_password }}'
+        method: GET
+        force_basic_auth: true
+        return_content: true
+        register: crumb
+        failed_when: crumb is failed
+
+    - name: Create a new Jenkins API Access Token
+      ansible.builtin.uri:
+        url: "http://localhost:{{ jenkins_http_port }}{{ jenkins_url_prefix }}/me/descriptorByName/jenkins.security.ApiTokenProperty/generateNewToken"
+        user: '{{ jenkins_admin_username }}'
+        password: '{{ jenkins_admin_password }}'
+        method: POST
+        body: "newTokenName=AccessToken001"
+        headers:
+          Jenkins-Crumb: "{{ crumb }}"
+        force_basic_auth: true
+        return_content: true
+        register: jk_token_response
+        failed_when: jenkins_token_response is failed
+
+    - name: Extract the API Token fron JSON
+      ansible.builtin.debug:
+        msg: '{{ jk_token_response | community.general.json_query(".data.tokenValue") }}'
+        register: jk_token
+
+    - name: Replace Token in Environemnt Variables file, if it was added by dictionary from vars in previous steps.
+      lineinfile: 
+        path: '/etc/environment'
+        regexp: '^JENKINS_API_TOKEN=.*$'
+        line: 'JENKINS_API_TOKEN={{ jk_token }}'
+        backrefs: true
