@@ -9,7 +9,7 @@ It can be used in Windows 10/11 (a bit difficult to setup), or you can use Debia
 4. Change into the project root folder.
 5. Download required roles with the following command:
     ```
-    ansible-galaxy install -r ./roles/requirements.yml
+    ansible-galaxy install --force -r ./roles/requirements.yml
     ```
 6. To create and Run the VM:
     ```
